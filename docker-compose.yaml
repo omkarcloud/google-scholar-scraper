@@ -1,0 +1,12 @@
+services:
+  google-scholar-scraper:
+    build: .
+    restart: unless-stopped
+    shm_size: "1gb"
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      # Optional: leave this unset to go out from your own connection (fine for light use).
+      # For volume, a datacenter proxy (a US one for the case-law endpoints):
+      # - GOOGLE_SCHOLAR_PROXY=http://user:pass@host:port
