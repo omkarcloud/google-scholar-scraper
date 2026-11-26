@@ -67,6 +67,16 @@ def test_library_links_are_left_out_of_the_resources():
     assert page["rows"][0]["resources"] == [{"type": "pdf", "source": "acm.org", "link": "https://dl.acm.org/doi/pdf/10.1145/3641289"}]
 
 
+def test_library_links_are_left_out_of_an_article_page_too():
+    html = load("article.html")
+    plain = P.parse_article(html, "JicYPdAAAAAJ:VN7nJs4JPk0C")["resources"]
+    block = '<div id="gsc_oci_title_gg">'
+    assert block in html and len(plain) == 1
+    library = ('<div class="gsc_oci_title_ggi"><a href="/scholar?output=instlink&amp;q=info:x:scholar.google.com/'
+               '&amp;hl=en&amp;oi=lle">Full View</a></div>')
+    assert P.parse_article(html.replace(block, block + library, 1), "JicYPdAAAAAJ:VN7nJs4JPk0C")["resources"] == plain
+
+
 def test_every_row_has_the_same_keys():
     keys = None
     for name in ("search_machine_learning.html", "search_citation_row.html", "search_sorted_by_date.html",

@@ -505,6 +505,8 @@ def parse_article(html, author_article):
         "other_fields": [],
     }
     for a in doc.xpath('//div[@id="gsc_oci_title_gg"]//a[@href]'):
+        if LIBRARY_LINK in (a.get("href") or ""):
+            continue                 # the requesting network's library, as in _resources
         tag = clean(" ".join(a.xpath('.//span[@class="gsc_vcd_title_ggt"]/text()')))
         rest = clean((_text(a) or "").replace(tag or "", "", 1)) or ""
         out["resources"].append({"type": tag.strip("[]").lower() if tag else None,
